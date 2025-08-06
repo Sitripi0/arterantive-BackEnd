@@ -1,15 +1,68 @@
 const express = require("express");
-const  router = express.Router();
+const router = express.Router();
+const Post = require("../models/Post.model")
+const { isAuthenticated } = require("../middleware/jwt.middleware")
 
-// POST /posts — Crea un nuevo release (solo artistas)
+// POST /api/posts — Crea un nuevo post (solo authenticated)
+router.post("/posts", isAuthenticated, (req, res, next) => {
+    const { title, date, text } = req.body;
+    const userId = req.payload._id;
 
-// GET /posts — Lista todos los releases
+    Post.create({
+        title,
+        date,
+        text,
+        authorId: userId
+    })
+        .then(createdPost => res.status(201).json(createdPost))
+        .catch(next);
+});
 
-// GET /posts/:id — Ver detalle de un release
+// GET /api/posts — Lista todos los posts
+router.get("/posts", (req, res, next) => {
+    Post.find({})
+        .then((posts) => {
+            console.log("Retrieved students ->", posts);
+            res.json(posts);
+        })
+        .catch(next);
+});
+// GET /posts/:postId — Ver detalle de un post
+router.get("/posts/:_id", (req, res, next) => {
+    const { _id } = req.params;
+    Post.findById(_id)
+        .then((post) => {
+            console.log("Retrieved post ->", post);
+            res.json(post);
+        })
+        .catch(next);
+});
 
-// PUT /posts/:id — Editar un release (solo el artista propietario)
 
-// DELETE /posts/:id — Eliminar un release
+// PUT /posts/:id — Editar un post (solo auth/owner)
+router.put("/posts/:_id", isAuthenticated, (req, res, next) => {
+    const { _id } = req.params;
+    const updateData = req.body;
+
+    Post.findByIdAndUpdate(_id, updateData, { new: true })
+        .then((updatedPost) => {
+            console.log("Post Updated ->", updatedPost);
+            res.json(updatedPost);
+        })
+        .catch(next);
+});
+
+
+// DELETE /posts/:id — Eliminar un post (solo Auth/owner)
+router.delete("/posts/:postId", isAuthenticated, (req, res, next) => {
+    const { _id } = req.params;
+    const userId = req.payload._id;
+    Post.findByIdAndDelete(_id)
+        .then(() => {
+            res.status(204).send();
+        })
+        .catch(next);
+});
 
 module.exports = router;
 
