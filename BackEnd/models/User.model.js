@@ -17,11 +17,11 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Name is required."],
     },
-    role: {
-      type: String,
-      enum: ["artist","user"],
-      default:"user",
-    },
+    // role: {
+    //   type: String,
+    //   enum: ["artist","user"],
+    //   default:"user",
+    // },
     bio: {type:String, required:[true, "Bio is required"]},
     profileImage : {type: String},
     socialMedia:[
@@ -33,7 +33,6 @@ const userSchema = new Schema(
     favorites:[{type : Schema.Types.ObjectId, ref:"User"}]
   },
   {
-    // this second object adds extra properties: `createdAt` and `updatedAt`
     timestamps: true,
   }
 );
