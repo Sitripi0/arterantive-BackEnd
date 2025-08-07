@@ -30,7 +30,8 @@ const userSchema = new Schema(
         URL: {type: String}
       }
     ],
-    favorites:[{type : Schema.Types.ObjectId, ref:"User"}]
+    favoritePosts:[{type : Schema.Types.ObjectId, ref:"Post"}],
+    favoriteArtists:[{type : Schema.Types.ObjectId, ref:"User"}],
   },
   {
     timestamps: true,

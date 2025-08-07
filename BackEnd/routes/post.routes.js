@@ -27,10 +27,11 @@ router.get("/posts", (req, res, next) => {
         })
         .catch(next);
 });
+
 // GET /posts/:postId — Ver detalle de un post
-router.get("/posts/:_id", (req, res, next) => {
-    const { _id } = req.params;
-    Post.findById(_id)
+router.get("/posts/:postId", (req, res, next) => {
+    const { postId } = req.params;
+    Post.findById(postId)
         .then((post) => {
             console.log("Retrieved post ->", post);
             res.json(post);
@@ -38,13 +39,12 @@ router.get("/posts/:_id", (req, res, next) => {
         .catch(next);
 });
 
-
 // PUT /posts/:id — Editar un post (solo auth/owner)
-router.put("/posts/:_id", isAuthenticated, (req, res, next) => {
-    const { _id } = req.params;
+router.put("/posts/:postId", isAuthenticated, (req, res, next) => {
+    const { postId } = req.params;
     const updateData = req.body;
 
-    Post.findByIdAndUpdate(_id, updateData, { new: true })
+    Post.findByIdAndUpdate(postId, updateData, { new: true })
         .then((updatedPost) => {
             console.log("Post Updated ->", updatedPost);
             res.json(updatedPost);
@@ -52,12 +52,11 @@ router.put("/posts/:_id", isAuthenticated, (req, res, next) => {
         .catch(next);
 });
 
-
-// DELETE /posts/:id — Eliminar un post (solo Auth/owner)
+// DELETE /posts/:postId — Eliminar un post (solo Auth/owner)
 router.delete("/posts/:postId", isAuthenticated, (req, res, next) => {
-    const { _id } = req.params;
+    const { postId } = req.params;
     const userId = req.payload._id;
-    Post.findByIdAndDelete(_id)
+    Post.findByIdAndDelete(postId)
         .then(() => {
             res.status(204).send();
         })

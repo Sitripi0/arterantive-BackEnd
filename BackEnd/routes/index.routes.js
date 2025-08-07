@@ -7,6 +7,6 @@ router.get("/", (req, res, next) => {
 
 router.use("/auth",require("./auth.routes"));
 router.use("/",require("./post.routes"));
-router.use("/",require("./user.routes"));
+router.use("/",require("./comment.routes"));
 
 module.exports = router;

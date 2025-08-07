@@ -17,10 +17,13 @@ router.post("/posts/:id/comments", isAuthenticated, (req, res, next) => {
     .then((createdComment) => res.status(201).json(createdComment))
     .catch(next);
 });
+
+
 // DELETE api/posts/:postId/comments/:commentId — Eliminar comentario 
 router.delete("/posts/:postId/comments/:commentId", isAuthenticated, (req, res, next) => {
     const { commentId } = req.params;
-     const userId = req.payload._id;
+    const userId = req.payload._id;
+    
     Comment.findByIdAndDelete(commentId)
         .then(() => {
             res.status(204).send();
