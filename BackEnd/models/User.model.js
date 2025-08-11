@@ -22,7 +22,7 @@ const userSchema = new Schema(
     //   enum: ["artist","user"],
     //   default:"user",
     // },
-    bio: {type:String, required:[true, "Bio is required"]},
+    bio: {type:String, required:[false, "Bio is required"]},
     profileImage : {type: String},
     socialMedia:[
       {
