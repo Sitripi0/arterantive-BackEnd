@@ -5,7 +5,7 @@ const { isAuthenticated } = require("../middleware/jwt.middleware")
 
 // POST /api/posts — Crea un nuevo post (solo authenticated)
 router.post("/posts", isAuthenticated, (req, res, next) => {
-    const { title, date, text,typeOfPost } = req.body;
+    const { title, date, text,typeOfPost,category } = req.body;
     const userId = req.payload._id;
 
     Post.create({
@@ -13,6 +13,7 @@ router.post("/posts", isAuthenticated, (req, res, next) => {
         date,
         text,
         typeOfPost,
+        category,
         authorId: userId
     })
         .then(createdPost => res.status(201).json(createdPost))
