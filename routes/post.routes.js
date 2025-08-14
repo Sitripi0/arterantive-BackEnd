@@ -31,24 +31,36 @@ router.get("/posts", (req, res, next) => {
     .catch(next);
 });
 
-// GET /api/posts/:postId — Get post details including populated comments and users
+// GET /api/posts/:postId — Get post details including populated author as user and comments with users
 router.get("/posts/:postId", (req, res, next) => {
   const { postId } = req.params;
 
   Post.findById(postId)
     .populate({
-      path: "comments", // populate the comments array
+      path: "authorId",
+      select: "name",
+    })
+    .populate({
+      path: "comments",
       populate: {
-        path: "user",     // for each comment, populate the 'user'
-        select: "name", // only include the username
+        path: "user",
+        select: "name",
       },
     })
     .then((post) => {
       if (!post) {
         return res.status(404).json({ message: "Post not found" });
       }
-      console.log("Retrieved post with comments ->", post);
-      res.json(post);
+
+      // Convert mongoose document to plain JS object
+      const postObj = post.toObject();
+
+      // Rename authorId to user for frontend convenience
+      postObj.user = postObj.authorId;
+      delete postObj.authorId;
+
+      console.log("Retrieved post with populated user and comments ->", postObj);
+      res.json(postObj);
     })
     .catch(next);
 });
