@@ -29,7 +29,7 @@ router.post("/posts/:id/comments", isAuthenticated, async (req, res, next) => {
     // Populate the user field in the created comment before sending response
     await createdComment.populate({
       path: "user",
-      select: "username name",
+      select: "name",
     });
 
     res.status(201).json(createdComment);
@@ -83,7 +83,7 @@ router.get("/posts/:postId", async (req, res, next) => {
         path: "comments",
         populate: {
           path: "user",
-          select: "username name",
+          select: "name",
         },
       });
 

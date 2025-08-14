@@ -40,7 +40,7 @@ router.get("/posts/:postId", (req, res, next) => {
       path: "comments", // populate the comments array
       populate: {
         path: "user",     // for each comment, populate the 'user'
-        select: "username", // only include the username
+        select: "name", // only include the username
       },
     })
     .then((post) => {
