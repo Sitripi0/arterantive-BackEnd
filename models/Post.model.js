@@ -18,6 +18,7 @@ const postSchema = new Schema(
     date: { type: Date},
     authorId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+    imageUrl: String,
   },
   { timestamps: true }
 );
