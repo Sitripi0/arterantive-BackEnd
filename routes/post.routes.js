@@ -7,7 +7,7 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 const fileUploader = require("../config/cloudinary.config");
 
 // POST "/api/upload" => Route that receives the image, sends it to Cloudinary via the fileUploader and returns the image URL
-router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
+router.post("/upload", fileUploader.single("mediaUrl"), (req, res, next) => {
   // console.log("file is: ", req.file)
  
   if (!req.file) {
@@ -23,7 +23,7 @@ router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
 
 // POST /api/posts — Create a new post (authenticated only)
 router.post("/posts", isAuthenticated, (req, res, next) => {
-  const { title, date, text, typeOfPost, category } = req.body;
+  const { title, date, text, typeOfPost, category,mediaUrl } = req.body;
   const userId = req.payload._id;
 
   Post.create({
@@ -33,6 +33,7 @@ router.post("/posts", isAuthenticated, (req, res, next) => {
     typeOfPost,
     category,
     authorId: userId,
+    mediaUrl
   })
     .then((createdPost) => res.status(201).json(createdPost))
     .catch(next);
